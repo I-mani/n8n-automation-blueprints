@@ -1,0 +1,627 @@
+{
+  "name": "Nathans Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -3984,
+        -592
+      ],
+      "id": "c5f66331-a764-4d1d-a9be-6980c727cfbd",
+      "name": " Trigger Manually"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "7f92f13a-cfbb-48b9-a966-638170ceb300",
+              "leftValue": "={{ $json.orderStatus }}",
+              "rightValue": "processing",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "25a8e619-9a6c-4d2c-bd24-ff26ea2d8a2a",
+              "leftValue": "={{ $json.employeeName }}",
+              "rightValue": "Mario",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        -3536,
+        -496
+      ],
+      "id": "6b6d8853-f7a4-4db6-ba58-37d686111d79",
+      "name": "Checkorderstatus"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "XHuw8CfbyAWnCWDW",
+          "mode": "list",
+          "cachedResultName": "processingorders",
+          "cachedResultUrl": "/projects/VhLaRP2AzrcsBiyr/datatables/XHuw8CfbyAWnCWDW"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "orderID"
+            },
+            {
+              "keyName": "employeeName"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "orderID",
+              "displayName": "orderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "employeeName",
+              "displayName": "employeeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "dryRun": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -2864,
+        -688
+      ],
+      "id": "dbb398cb-425e-4281-bd77-29b5e78bbfce",
+      "name": "ProcessingOrders"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "i5OMrMrN2LLKoBW8",
+          "mode": "list",
+          "cachedResultName": "orders",
+          "cachedResultUrl": "/projects/VhLaRP2AzrcsBiyr/datatables/i5OMrMrN2LLKoBW8"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $json.orderID }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "orderID",
+              "displayName": "orderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "customerID",
+              "displayName": "customerID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "employeeName",
+              "displayName": "employeeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "orderPrice",
+              "displayName": "orderPrice",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "orderStatus",
+              "displayName": "orderStatus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -3312,
+        -592
+      ],
+      "id": "6f5beddc-23c5-47e8-a6d5-d09a82380439",
+      "name": "upsetOrders"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6136cb2e-24fa-4219-a5ca-75bbc446335d",
+              "name": "orderID",
+              "value": "={{ $json.orderID }}",
+              "type": "number"
+            },
+            {
+              "id": "a42444a1-f189-4cf9-b8ad-674b199ba65d",
+              "name": "employeeName",
+              "value": "={{ $json.employeeName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -3088,
+        -688
+      ],
+      "id": "04dcc63b-1f0a-45d4-b781-0cedcef95027",
+      "name": "setprocessingdata"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "i5OMrMrN2LLKoBW8",
+          "mode": "list",
+          "cachedResultName": "orders",
+          "cachedResultUrl": "/projects/VhLaRP2AzrcsBiyr/datatables/i5OMrMrN2LLKoBW8"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $json.orderID }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "orderID",
+              "displayName": "orderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "customerID",
+              "displayName": "customerID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "employeeName",
+              "displayName": "employeeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "orderPrice",
+              "displayName": "orderPrice",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "orderStatus",
+              "displayName": "orderStatus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -3312,
+        -304
+      ],
+      "id": "e52c20a5-50aa-4d1d-9377-2904ff9e320a",
+      "name": "Bookedorders",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=This week we've {{$json.totalBooked}} booked orders with a total value of {{$json.bookedSum.round(2)}}. My Assessment ID: {{ $('GetDataFromWarehouse').params.headerParameters.parameters[0].value }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -2864,
+        -304
+      ],
+      "id": "754d3577-42cf-4215-bb56-d52bc4a02196",
+      "name": "Discord",
+      "webhookId": "88293200-8522-493b-ba9c-02162ab74336",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "Ip53AYTPFZzNNUMU",
+          "name": "Discord Webhook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": " https://learn.app.n8n.cloud/webhook/courses/n8n-quickstart/company-warehouse",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-assessment-id",
+              "value": "4f22c52b9dd9f9de45d0a1380e1d2514"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -3760,
+        -496
+      ],
+      "id": "795ab9e9-7af6-475a-a208-75ba34aafccc",
+      "name": "GetDataFromWarehouse",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "RYjkKvaGAoIWUztl",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 12
+            }
+          ]
+        },
+        "misfireGraceSeconds": 1
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -3984,
+        -400
+      ],
+      "id": "88147206-7370-405d-9c3d-f01c5cbf102e",
+      "name": "Schedule Trigger",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "jsCode": "let items = $input.all();\nlet totalBooked = items.length;\nlet bookedSum = 0;\n\nfor (let i=0; i < items.length; i++) {\n  bookedSum = bookedSum + items[i].json.orderPrice;\n}\n\nreturn [{ json: {totalBooked, bookedSum} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3088,
+        -496
+      ],
+      "id": "f9f42e53-7a64-48b8-9996-d908ce8fba38",
+      "name": "CalculateBookedProcessingOrders"
+    },
+    {
+      "parameters": {
+        "jsCode": "let items = $input.all();\nlet totalBooked = items.length;\nlet bookedSum = 0;\n\nfor (let i=0; i < items.length; i++) {\n  bookedSum = bookedSum + items[i].json.orderPrice;\n}\n\nreturn [{ json: {totalBooked, bookedSum} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3088,
+        -304
+      ],
+      "id": "6967fe84-a605-4c1e-a137-2bbc1cdb1bd7",
+      "name": "CalculateBookedOrders"
+    },
+    {
+      "parameters": {
+        "jsCode": "var myContacts = [\n  {\n    json: {\n      name: 'Alice',\n      email: {\n        personal: 'alice@home.com',\n        work: 'alice@wonderland.org'\n      }\n    }\n  },\n  {\n    json: {\n      name: 'Bob',\n      email: {\n        personal: 'bob@mail.com',\n        work: 'contact@thebuilder.com'\n      }\n    }\n  }\n];\nreturn myContacts;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3760,
+        528
+      ],
+      "id": "c7f56011-1c55-4420-9a78-eb510a20e7c0",
+      "name": "Names and Email"
+    },
+    {
+      "parameters": {
+        "jsCode": "let items = $input.all();\nitems[0].json.Imohistheboss = items[0].json.email['personal'];\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3536,
+        528
+      ],
+      "id": "de1ab035-3bc2-4f16-ad13-4714c1ee10e0",
+      "name": "Referencing Data"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 12
+            }
+          ]
+        },
+        "misfireGraceSeconds": 1
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -3984,
+        528
+      ],
+      "id": "6c9e92a7-7b92-436b-860f-838ef617624d",
+      "name": "Schedule Trigger1",
+      "retryOnFail": false
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    " Trigger Manually": {
+      "main": [
+        [
+          {
+            "node": "GetDataFromWarehouse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Checkorderstatus": {
+      "main": [
+        [
+          {
+            "node": "upsetOrders",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Bookedorders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "upsetOrders": {
+      "main": [
+        [
+          {
+            "node": "setprocessingdata",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CalculateBookedProcessingOrders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "setprocessingdata": {
+      "main": [
+        [
+          {
+            "node": "ProcessingOrders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bookedorders": {
+      "main": [
+        [
+          {
+            "node": "CalculateBookedOrders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetDataFromWarehouse": {
+      "main": [
+        [
+          {
+            "node": "Checkorderstatus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "GetDataFromWarehouse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CalculateBookedOrders": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Names and Email": {
+      "main": [
+        [
+          {
+            "node": "Referencing Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Referencing Data": {
+      "main": [
+        []
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Names and Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "36fe946c-9dc8-4ce4-8079-6d86fbc2b5a2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5fc63036d1e000e18e2b4428666d47db9e7a21cb38cd4d4e4adc0316c85f20e6"
+  },
+  "nodeGroups": [],
+  "id": "7RRhwl37apiC56MJ",
+  "tags": []
+}

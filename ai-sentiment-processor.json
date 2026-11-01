@@ -1,0 +1,346 @@
+{
+  "name": "Practice simulation",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        -176
+      ],
+      "id": "41290b88-fb9a-4f7b-9858-4a2dd9cc9d36",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "quvC8ZzjHZ3d2DnF",
+          "mode": "list",
+          "cachedResultName": "NEW LEADS",
+          "cachedResultUrl": "/projects/VhLaRP2AzrcsBiyr/datatables/quvC8ZzjHZ3d2DnF"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "isNotEmpty"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "full_name",
+              "displayName": "full_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "company_name",
+              "displayName": "company_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "project_description",
+              "displayName": "project_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "estimated_budget",
+              "displayName": "estimated_budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -512,
+        -176
+      ],
+      "id": "b166b698-a6bf-4b1c-ad46-90ccff96fdfa",
+      "name": "Upsert row(s)"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze this incoming lead data. If the client's budget is over $1,000, output 'QUALIFIED'. If it is under $1,000, output 'DISQUALIFIED'.\n\nClients budget = {{ $json.estimated_budget }}\n\n\n",
+        "messages": {
+          "messageValues": []
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -288,
+        -176
+      ],
+      "id": "7ef444d0-a55b-4fa0-be53-e8f70c16d1af",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        64
+      ],
+      "id": "74ab0ef9-79c0-4323-977b-99cb72bf990c",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "AxZU4XOXv7V5Quuv",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      \"lead_id\": \"L-9041\",\n      \"full_name\": \"David Alao\",\n      \"email\": \"david@alaodigital.com\",\n      \"company_name\": \"Alao Media Group\",\n      \"project_description\": \"We are scaling our operations and need an aggressive Google Ads campaign to generate real estate buyers.\",\n      \"estimated_budget\": 4500,\n      \"phone\": \"+2348031112222\"\n    }\n  },\n  {\n    json: {\n      \"lead_id\": \"L-9042\",\n      \"full_name\": \"Sarah Jenkins\",\n      \"email\": \"sarah.j@bakerycorner.io\",\n      \"company_name\": \"The Cupcake Corner\",\n      \"project_description\": \"I need someone to manage my Instagram page and post pictures of our weekly baking schedule.\",\n      \"estimated_budget\": 250,\n      \"phone\": \"+15550199\"\n    }\n  },\n  {\n    json: {\n      \"lead_id\": \"L-9043\",\n      \"full_name\": \"Marcus Vance\",\n      \"email\": \"m.vance@vancetech.co\",\n      \"company_name\": \"Vance FinTech Solutions\",\n      \"project_description\": \"Looking for an enterprise agency to rebuild our customer acquisition funnel and run targeted LinkedIn ads.\",\n      \"estimated_budget\": 12000,\n      \"phone\": \"+442079460192\"\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -736,
+        -176
+      ],
+      "id": "12e6a401-b264-495d-8c4d-f257014a7d80",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "1fe535b8-555c-4543-9a8c-44964e9baeae",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "QUALIFIED",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        64,
+        -176
+      ],
+      "id": "b9adabad-4734-4b04-82ec-1b47d92788d8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=Find attached the qualified data below \n\n{{ $json.text }}\n\n",
+        "options": {
+          "tts": false
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -176
+      ],
+      "id": "45c48550-c49f-402e-bb32-8818a272bfab",
+      "name": "Discord",
+      "webhookId": "1b305281-7442-4fc9-b977-39eaed56642f",
+      "executeOnce": true,
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "KoP5AxR4VKJXcIb4",
+          "name": "Discord Webhook account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=\nFind attached the disqualified data below\n{{ $json.text }}\n",
+        "options": {
+          "tts": false
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        400,
+        -32
+      ],
+      "id": "977675e8-58ae-4902-b0bf-8245449d5caf",
+      "name": "Discord1",
+      "webhookId": "1b305281-7442-4fc9-b977-39eaed56642f",
+      "executeOnce": true,
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "KoP5AxR4VKJXcIb4",
+          "name": "Discord Webhook account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert row(s)": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Discord1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "07091697-0e8f-4abe-9bdb-eff4ae9e9786",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5fc63036d1e000e18e2b4428666d47db9e7a21cb38cd4d4e4adc0316c85f20e6"
+  },
+  "nodeGroups": [],
+  "id": "kHrAT1fCuBxb6d5c",
+  "tags": []
+}
